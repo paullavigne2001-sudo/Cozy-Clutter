@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cozy Clutter</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<section id="home" class="screen on">
+ <img src="icon.svg" class="logo" alt=""><h1>Cozy Clutter</h1><p class="sub">Objets cachés</p>
+ <button id="play" class="big">PLAY</button>
+ <button id="openSettings" class="round" aria-label="Paramètres">⚙</button>
+</section>
+<section id="levels" class="screen">
+ <header><button id="lvBack" class="round" aria-label="Retour">←</button><b>Niveaux</b><span></span></header>
+ <div id="lvList"></div>
+</section>
+<section id="game" class="screen">
+ <header><button id="gBack" class="round" aria-label="Retour">←</button><span id="hearts"></span><b id="count"></b><button id="hint" class="pill"></button></header>
+ <div id="bar"></div>
+ <div id="vp"><div id="stage"><img id="bg" alt="" draggable="false"><svg id="ov"></svg></div></div>
+</section>
+<div id="settings" class="modal"><div><h2>Paramètres</h2>
+ <label><input type="checkbox" id="optVib"> Vibrations</label>
+ <button id="privacy" class="pill">Options de confidentialité</button>
+ <button id="reset" class="pill">Réinitialiser la progression</button>
+ <button id="closeSettings" class="big">Fermer</button></div></div>
+<div id="over" class="modal"><div><h2>Plus de vies 💔</h2>
+ <button id="revive" class="big">▶ Pub : +1 vie</button>
+ <button id="retry" class="pill">Recommencer</button><button id="overMenu" class="pill">Menu</button></div></div>
+<div id="win" class="modal"><div><h2>Bravo ! 🎉</h2><p>Niveau terminé</p>
+ <button id="next" class="big">Niveau suivant</button><button id="winMenu" class="pill">Menu</button></div></div>
+<div id="fakead" class="modal"><div><h2>Pub (simulation)</h2><p id="fakeTxt"></p></div></div>
+<script src="ads.js"></script><script src="game.js"></script>
+</body></html>
