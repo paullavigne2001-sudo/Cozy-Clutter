@@ -2,7 +2,7 @@ const $=id=>document.getElementById(id);
 const st={get(k,d){try{const v=localStorage.getItem("cc_"+k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("cc_"+k,JSON.stringify(v))}catch(e){}}};
 // Réglages du jeu (à ajuster)
 const CFG={lives:3,freeHints:1,maxRevives:2,adEvery:2};
-let settings=st.get("settings",{vib:true}),progress=st.get("progress",{});
+let settings=st.get("settings",{vib:true}),cur=st.get("level",0);
 let LEVELS=[],idx=0,OBJ=[],found=new Set(),lives=0,maxLives=3,hintsFree=0,revives=0,finished=0,busy=false;
 let W=1024,H=1536,s=1,tx=0,ty=0,minS=.3,maxS=1.5,moved=false;
 const vp=$("vp"),stage=$("stage"),ov=$("ov"),bg=$("bg"),bar=$("bar");
@@ -13,14 +13,14 @@ const vib=ms=>{if(settings.vib&&navigator.vibrate)navigator.vibrate(ms);};
 // Niveaux
 async function loadLevels(){
   try{LEVELS=(await (await fetch("levels/levels.json")).json()).levels;}catch(e){LEVELS=[];}
-  renderLevels();
+  updateHome();
 }
-function renderLevels(){
-  const l=$("lvList");l.innerHTML="";
-  LEVELS.forEach((L,i)=>{const b=document.createElement("button");b.className="lv";
-    b.innerHTML=`<span>${L.title}</span><span>${progress[L.title]?"✓":""}</span>`;b.onclick=()=>startLevel(i);l.appendChild(b);});
-  if(!LEVELS.length)l.textContent="Aucun niveau trouvé.";
+function updateHome(){
+  const done=LEVELS.length>0&&cur>=LEVELS.length;
+  $("curLevel").textContent=!LEVELS.length?"Aucun niveau trouvé.":done?"Tous les niveaux sont terminés. Nouveaux niveaux bientôt !":"Niveau "+(cur+1)+" · "+LEVELS[cur].title;
+  $("play").hidden=done||!LEVELS.length;
 }
+function goHome(){updateHome();show("home");}
 async function startLevel(i){
   idx=i;const L=LEVELS[i];
   try{OBJ=(await (await fetch(L.data)).json()).objects.map((p,k)=>({n:p.name||"Objet "+(k+1),x:+p.x,y:+p.y,r:+p.r}));}
@@ -69,7 +69,7 @@ function tap(cx,cy){
   ov.insertAdjacentHTML("beforeend",`<g><circle cx="${o.x}" cy="${o.y}" r="${o.r+8}" fill="rgba(63,157,107,.25)" stroke="#3f9d6b" stroke-width="8"/><path d="M${o.x-o.r*.4} ${o.y} l${o.r*.3} ${o.r*.3} l${o.r*.6} ${-o.r*.7}" fill="none" stroke="#3f9d6b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></g>`);
   hud();
   if(found.size===OBJ.length){
-    progress[LEVELS[idx].title]=true;st.set("progress",progress);finished++;
+    cur=Math.max(cur,idx+1);st.set("level",cur);finished++;
     $("next").hidden=idx>=LEVELS.length-1;modal("win",true);
   }
 }
@@ -91,18 +91,17 @@ $("revive").onclick=async()=>{
   if(ok){revives++;lives=1;hud();modal("over",false);}
 };
 $("retry").onclick=()=>startLevel(idx);
-$("overMenu").onclick=()=>{modal("over",false);renderLevels();show("levels");};
+$("overMenu").onclick=()=>{modal("over",false);goHome();};
 $("next").onclick=()=>afterLevel(()=>startLevel(idx+1));
-$("winMenu").onclick=()=>afterLevel(()=>{renderLevels();show("levels");});
+$("winMenu").onclick=()=>afterLevel(goHome);
 // Navigation et paramètres
-$("play").onclick=()=>{renderLevels();show("levels");};
-$("lvBack").onclick=()=>show("home");
-$("gBack").onclick=()=>{renderLevels();show("levels");};
+$("play").onclick=()=>startLevel(Math.min(cur,LEVELS.length-1));
+$("gBack").onclick=goHome;
 $("openSettings").onclick=()=>{$("optVib").checked=settings.vib;modal("settings",true);};
 $("closeSettings").onclick=()=>modal("settings",false);
 $("optVib").onchange=e=>{settings.vib=e.target.checked;st.set("settings",settings);};
 $("privacy").onclick=()=>Ads.privacy();
-$("reset").onclick=()=>{if(confirm("Effacer la progression ?")){progress={};st.set("progress",progress);renderLevels();}};
+$("reset").onclick=()=>{if(confirm("Effacer la progression ?")){cur=0;st.set("level",0);updateHome();}};
 // Gestes
 const ptr=new Map();let startD=0,startS=1;
 vp.addEventListener("pointerdown",e=>{vp.setPointerCapture(e.pointerId);ptr.set(e.pointerId,{x:e.clientX,y:e.clientY,sx:e.clientX,sy:e.clientY});

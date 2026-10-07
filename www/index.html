@@ -4,13 +4,10 @@
 <title>Cozy Clutter</title><link rel="stylesheet" href="style.css"></head>
 <body>
 <section id="home" class="screen on">
- <img src="icon.svg" class="logo" alt=""><h1>Cozy Clutter</h1><p class="sub">Objets cachés</p>
+ <img src="icon.svg" class="logo" alt=""><h1>Cozy Clutter</h1><p class="sub" style="margin:0">Objets cachés</p>
+ <p id="curLevel" style="margin:0 0 22px;font-weight:700;font-size:20px;text-align:center;padding:0 24px"></p>
  <button id="play" class="big">PLAY</button>
  <button id="openSettings" class="round" aria-label="Paramètres">⚙</button>
-</section>
-<section id="levels" class="screen">
- <header><button id="lvBack" class="round" aria-label="Retour">←</button><b>Niveaux</b><span></span></header>
- <div id="lvList"></div>
 </section>
 <section id="game" class="screen">
  <header><button id="gBack" class="round" aria-label="Retour">←</button><span id="hearts"></span><b id="count"></b><button id="hint" class="pill"></button></header>
