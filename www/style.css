@@ -31,3 +31,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:8px;pad
 .modal>div{background:var(--bg);border:3px solid var(--ring);border-radius:24px;padding:22px 26px;display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center;min-width:250px}
 .modal h2{margin:0}.modal label{font-weight:700}
 @media (prefers-reduced-motion:reduce){#vp.miss,.pulse,#stage.anim{animation:none;transition:none}}
+#lvInfo{text-align:center;font-weight:700;font-size:14px;padding:0 12px 4px}
+.lv span:first-child{flex:1}
+.tag{border-radius:999px;padding:2px 12px;font-size:14px;color:#fff;align-self:center}
+.tA{background:#3f9d6b}.tB{background:#d49a00}.tC{background:#e8743b}.tD{background:#c0392b}
