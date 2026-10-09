@@ -1,1 +1,8 @@
-{"levels":[{"title":"Cuisine","image":"levels/cuisine.webp","data":"levels/cuisine.json","lives":3}]}
+{"levels":[
+  {"title":"Cuisine","image":"levels/cuisine.webp","data":"levels/cuisine.json","lives":3}
+  {"title":"A108","image":"levels/A108.webp","data":"levels/A108.json","lives":3}
+  {"title":"A118","image":"levels/A118.webp","data":"levels/A118.json","lives":3}
+  {"title":"A99","image":"levels/A99.webp","data":"levels/A99.json","lives":3}
+  {"title":"A69","image":"levels/A69.webp","data":"levels/A69.json","lives":3}
+  {"title":"B120","image":"levels/B120.webp","data":"levels/B120.json","lives":3}
+]}
