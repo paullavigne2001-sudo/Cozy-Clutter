@@ -10,5 +10,10 @@
   {"title":"B70","image":"levels/B70.webp","data":"levels/B70.json","lives":3},
   {"title":"B42","image":"levels/B42.webp","data":"levels/B42.json","lives":3},
   {"title":"B101","image":"levels/B101.webp","data":"levels/B101.json","lives":3},
-  {"title":"C43","image":"levels/C43.webp","data":"levels/C43.json","lives":3}
+  {"title":"C53","image":"levels/C53.webp","data":"levels/C53.json","lives":3},
+  {"title":"C30","image":"levels/C30.webp","data":"levels/C30.json","lives":3},
+  {"title":"A20","image":"levels/A20.webp","data":"levels/A20.json","lives":3},
+  {"title":"B39","image":"levels/B39.webp","data":"levels/B39.json","lives":3},
+  {"title":"B118","image":"levels/B118.webp","data":"levels/B118.json","lives":3},
+  {"title":"D112","image":"levels/D112.webp","data":"levels/D112.json","lives":3}
 ]}
