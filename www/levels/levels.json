@@ -4,5 +4,11 @@
   {"title":"A118","image":"levels/A118.webp","data":"levels/A118.json","lives":3},
   {"title":"A99","image":"levels/A99.webp","data":"levels/A99.json","lives":3},
   {"title":"A69","image":"levels/A69.webp","data":"levels/A69.json","lives":3},
-  {"title":"B120","image":"levels/B120.webp","data":"levels/B120.json","lives":3}
+  {"title":"B120","image":"levels/B120.webp","data":"levels/B120.json","lives":3},
+  {"title":"B49","image":"levels/B49.webp","data":"levels/B49.json","lives":3},
+  {"title":"B91","image":"levels/B91.webp","data":"levels/B91.json","lives":3},
+  {"title":"B70","image":"levels/B70.webp","data":"levels/B70.json","lives":3},
+  {"title":"B42","image":"levels/B42.webp","data":"levels/B42.json","lives":3},
+  {"title":"B101","image":"levels/B101.webp","data":"levels/B101.json","lives":3},
+  {"title":"C43","image":"levels/C43.webp","data":"levels/C43.json","lives":3}
 ]}
