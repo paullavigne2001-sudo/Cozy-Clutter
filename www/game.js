@@ -1,7 +1,9 @@
 const $=id=>document.getElementById(id);
 const st={get(k,d){try{const v=localStorage.getItem("cc_"+k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("cc_"+k,JSON.stringify(v))}catch(e){}}};
 // Réglages du jeu (à ajuster)
-const CFG={lives:3,freeHints:1,maxRevives:2,adEvery:2};
+const CFG={lives:3,freeHints:1,maxRevives:2,adEvery:2,levelPicker:true};
+const DIFF={A:"Facile",B:"Moyen",C:"Difficile",D:"Expert"};
+let loadErr="";
 let settings=st.get("settings",{vib:true}),cur=st.get("level",0);
 let LEVELS=[],idx=0,OBJ=[],found=new Set(),lives=0,maxLives=3,hintsFree=0,revives=0,finished=0,busy=false;
 let W=1024,H=1536,s=1,tx=0,ty=0,minS=.3,maxS=1.5,moved=false;
@@ -12,13 +14,30 @@ const vib=ms=>{if(settings.vib&&navigator.vibrate)navigator.vibrate(ms);};
 
 // Niveaux
 async function loadLevels(){
-  try{LEVELS=(await (await fetch("levels/levels.json")).json()).levels;}catch(e){LEVELS=[];}
+  try{const r=await fetch("levels/levels.json");if(!r.ok)throw new Error("levels.json : erreur "+r.status);LEVELS=(await r.json()).levels;if(!Array.isArray(LEVELS))throw new Error("levels.json : liste « levels » absente");}catch(e){LEVELS=[];loadErr=String(e&&e.message||e);}
   updateHome();
 }
 function updateHome(){
   const done=LEVELS.length>0&&cur>=LEVELS.length;
-  $("curLevel").textContent=!LEVELS.length?"Aucun niveau trouvé.":done?"Tous les niveaux sont terminés. Nouveaux niveaux bientôt !":"Niveau "+(cur+1)+" · "+LEVELS[cur].title;
+  $("curLevel").textContent=!LEVELS.length?"Aucun niveau trouvé. "+loadErr:done?"Tous les niveaux sont terminés. Nouveaux niveaux bientôt !":label(cur);
   $("play").hidden=done||!LEVELS.length;
+}
+function info(i){
+  const L=LEVELS[i],re=/^([ABCD])(?![A-Za-zÀ-ÿ])[\s_\-.:]*\d*[\s_\-.:]*/i;
+  let m=re.exec(L.title||""),name=L.title||"";
+  if(m)name=name.slice(m[0].length)||name;else m=re.exec((L.data||"").split("/").pop());
+  const k=m?m[1].toUpperCase():"";
+  return{num:i+1,key:k,diff:DIFF[k]||"",name};
+}
+function label(i){const f=info(i);return "Niveau "+f.num+(f.diff?" · "+f.diff:"")+" · "+f.name;}
+function renderLevels(){
+  const l=$("lvList");l.innerHTML="";
+  LEVELS.forEach((L,i)=>{
+    const f=info(i),b=document.createElement("button"),a=document.createElement("span"),t=document.createElement("span");
+    b.className="lv";a.textContent=(i<cur?"✓ ":i===cur?"▶ ":"")+f.num+". "+f.name;b.appendChild(a);
+    if(f.key){t.className="tag t"+f.key;t.textContent=f.diff;b.appendChild(t);}
+    b.onclick=()=>startLevel(i);l.appendChild(b);
+  });
 }
 function goHome(){updateHome();show("home");}
 async function startLevel(i){
@@ -40,6 +59,7 @@ async function startLevel(i){
 function hud(){
   $("hearts").textContent="❤️".repeat(lives)+"🖤".repeat(maxLives-lives);
   $("count").textContent=found.size+" / "+OBJ.length;
+  $("lvInfo").textContent=label(idx);
   $("hint").textContent=hintsFree>0?"💡 Indice (gratuit)":"💡 Indice (pub)";
 }
 function buildTiles(){
@@ -97,6 +117,9 @@ $("winMenu").onclick=()=>afterLevel(goHome);
 // Navigation et paramètres
 $("play").onclick=()=>startLevel(Math.min(cur,LEVELS.length-1));
 $("gBack").onclick=goHome;
+$("pick").hidden=!CFG.levelPicker;
+$("pick").onclick=()=>{renderLevels();show("levels");};
+$("lvBack").onclick=goHome;
 $("openSettings").onclick=()=>{$("optVib").checked=settings.vib;modal("settings",true);};
 $("closeSettings").onclick=()=>modal("settings",false);
 $("optVib").onchange=e=>{settings.vib=e.target.checked;st.set("settings",settings);};
